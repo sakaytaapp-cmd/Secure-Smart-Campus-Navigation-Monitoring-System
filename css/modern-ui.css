@@ -381,3 +381,44 @@ th {
   color: #fff;
   margin-top: 0.2rem;
 }
+
+/* Badges for V1 Matrix & Statuses */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+.badge-emerald {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-rose {
+  background: rgba(244, 63, 94, 0.18);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+.badge-amber {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.badge-cyan {
+  background: rgba(6, 182, 212, 0.18);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
+
+/* Matrix Active Highlight */
+.matrix-active-cell {
+  outline: 2px solid var(--accent-indigo);
+  background: rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
+}
+.matrix-active-row td {
+  background: rgba(99, 102, 241, 0.05);
+}
+

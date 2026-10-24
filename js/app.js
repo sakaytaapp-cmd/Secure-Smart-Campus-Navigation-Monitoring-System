@@ -242,6 +242,101 @@ const AppController = {
     document.getElementById('stat-prob').textContent = prob.toFixed(1) + '%';
   },
 
+  runV1AccessCheck() {
+    const roleEl = document.getElementById('v1-user-type');
+    const areaEl = document.getElementById('v1-area');
+    if (!roleEl || !areaEl) return;
+    const role = roleEl.value;
+    const area = areaEl.value;
+    const result = V1Foundation.checkAccess(role, area);
+
+    const outEl = document.getElementById('v1-access-output');
+    if (!outEl) return;
+    let badgeClass = 'badge-rose';
+    if (result.status === 'granted') badgeClass = 'badge-emerald';
+    else if (result.status === 'limited') badgeClass = 'badge-amber';
+
+    outEl.innerHTML = `
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.4rem;">
+        <span class="badge ${badgeClass}" style="font-size:0.85rem;padding:0.3rem 0.8rem;">${result.message}</span>
+        <span style="font-weight:600;color:#fff;">Role: ${result.userType} &rarr; Target: ${result.area}</span>
+      </div>
+      <div style="color:var(--text-muted);font-size:0.82rem;">${result.description}</div>
+    `;
+
+    // Highlight corresponding cell & row in the Access Matrix
+    document.querySelectorAll('#v1-matrix-table tr').forEach(r => r.classList.remove('matrix-active-row'));
+    document.querySelectorAll('#v1-matrix-table td').forEach(c => c.classList.remove('matrix-active-cell'));
+
+    const rowEl = document.getElementById(`matrix-row-${result.userType}`);
+    const cellEl = document.getElementById(`cell-${result.userType}-${result.area}`);
+    if (rowEl) rowEl.classList.add('matrix-active-row');
+    if (cellEl) cellEl.classList.add('matrix-active-cell');
+  },
+
+  runV1NumberTheory() {
+    const num1El = document.getElementById('v1-num1');
+    const num2El = document.getElementById('v1-num2');
+    if (!num1El || !num2El) return;
+    const num1 = num1El.value;
+    const num2 = num2El.value;
+    const res = V1Foundation.checkNumberTheory(num1, num2);
+
+    const summaryEl = document.getElementById('v1-number-summary');
+    const stepsBody = document.getElementById('v1-euclidean-steps-body');
+    if (!summaryEl || !stepsBody) return;
+
+    if (res.error) {
+      summaryEl.innerHTML = `<span style="color:#fb7185;">${res.error}</span>`;
+      stepsBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Awaiting valid numerical inputs</td></tr>';
+      return;
+    }
+
+    const parityBadge = res.isEven ? '<span class="badge badge-cyan">EVEN</span>' : '<span class="badge badge-amber">ODD</span>';
+    const div5Badge = res.isDivBy5 ? '<span class="badge badge-emerald">Divisible by 5</span>' : '<span class="badge badge-rose">Not Divisible by 5</span>';
+
+    let gcdHtml = '';
+    if (res.gcdResult) {
+      gcdHtml = `
+        <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border-subtle);">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;">Euclidean Greatest Common Divisor</div>
+          <div style="font-family:var(--font-mono);font-size:1.15rem;font-weight:700;color:#22d3ee;margin-top:0.2rem;">
+            gcd(${res.gcdResult.origA}, ${res.gcdResult.origB}) = ${res.gcdResult.gcd}
+          </div>
+        </div>
+      `;
+
+      stepsBody.innerHTML = res.gcdResult.steps.map(s => `
+        <tr>
+          <td style="font-family:var(--font-mono);color:var(--text-muted);">#${s.step}</td>
+          <td style="font-family:var(--font-mono);font-weight:600;color:#fff;">${s.dividend}</td>
+          <td style="font-family:var(--font-mono);color:#38bdf8;">${s.divisor}</td>
+          <td style="font-family:var(--font-mono);color:#a855f7;">${s.quotient}</td>
+          <td style="font-family:var(--font-mono);color:${s.remainder === 0 ? '#34d399' : '#fb7185'};font-weight:700;">${s.remainder}</td>
+          <td style="font-family:var(--font-mono);font-size:0.8rem;color:#f8fafc;">${s.equation}</td>
+        </tr>
+      `).join('');
+    } else {
+      stepsBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">Enter second number to calculate GCD steps</td></tr>';
+    }
+
+    summaryEl.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <span style="font-weight:600;color:#fff;">Parity:</span>
+          ${parityBadge}
+          <span style="font-size:0.8rem;color:var(--text-muted);">${res.parityExplanation}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <span style="font-weight:600;color:#fff;">Divisibility (mod 5):</span>
+          ${div5Badge}
+          <span style="font-size:0.8rem;color:var(--text-muted);">${res.divBy5Explanation}</span>
+        </div>
+        ${gcdHtml}
+      </div>
+    `;
+  },
+
   runMonteCarlo() {
     const metrics = CampusProbability.analyzeRandomVariable();
     const sim = CampusProbability.simulateMonteCarlo(500);
@@ -264,6 +359,8 @@ const AppController = {
   },
 
   init() {
+    this.runV1AccessCheck();
+    this.runV1NumberTheory();
     CampusFSM.render();
     this.runCrypto(false);
     CampusGraph.renderMap(['GATE', 'ADMIN', 'REGISTRAR', 'CSM', 'COMLAB1']);

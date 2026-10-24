@@ -30,7 +30,8 @@
   <!-- Navigation Tabs -->
   <div class="nav-container">
     <div class="nav-tabs">
-      <button class="tab-btn active" onclick="AppController.switchTab('tab-fsm', this)">1. Finite State Machine (FSM)</button>
+      <button class="tab-btn active" onclick="AppController.switchTab('tab-v1', this)">0. V1 Foundation (Access & Number Theory)</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-fsm', this)">1. Finite State Machine (FSM)</button>
       <button class="tab-btn" onclick="AppController.switchTab('tab-crypto', this)">2. Cryptography & Auth Gate</button>
       <button class="tab-btn" onclick="AppController.switchTab('tab-nav', this)">3. Graph Navigation & Recursion</button>
       <button class="tab-btn" onclick="AppController.switchTab('tab-tree', this)">4. Campus Tree & Recursion</button>
@@ -42,8 +43,216 @@
   <!-- Main Content Panels -->
   <main class="main-container">
 
+    <!-- TAB 0: V1 FOUNDATION (STUDENT ACCESS & NUMBER THEORY) -->
+    <section id="tab-v1" class="tab-panel active">
+      <!-- Banner / Provenance Header -->
+      <div class="card" style="margin-bottom:1.25rem;border-left:4px solid var(--accent-indigo);">
+        <div class="card-header">
+          <span class="card-title">Foundational Prototype: Student Access Management System</span>
+          <span class="card-tag">Author: Honielyn • System Lineage v1.0 &rarr; v2.0</span>
+        </div>
+        <p style="font-size:0.875rem;color:var(--text-muted);line-height:1.6;">
+          This module preserves and executes the core requirements of the original <strong>Student Access Management System</strong> (v1 prototype).
+          Below, you can interact with the original rule-based authorization, the binary access relation matrix \(M_R \subseteq U \times A\), and elementary number theory validations (Parity, Modulo-5 Divisibility, and Euclidean Algorithm \(\gcd(a, b)\)). The comparison matrix at the bottom demonstrates how each v1 feature was mathematically upgraded into the 6 discrete structures of the v2 Smart Campus system.
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <!-- 1. USER ACCESS CHECK -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">1. User Access Check</span>
+            <span class="card-tag">Rule-Based Authorization</span>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">
+            Select a User Type and Area to verify access permissions according to the original campus access rules.
+          </p>
+
+          <label>User Type</label>
+          <select id="v1-user-type" onchange="AppController.runV1AccessCheck()">
+            <option value="Student" selected>Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Visitor">Visitor</option>
+          </select>
+
+          <label>Campus Area</label>
+          <select id="v1-area" onchange="AppController.runV1AccessCheck()">
+            <option value="Library" selected>Library</option>
+            <option value="Laboratory">Laboratory</option>
+            <option value="Office">Office</option>
+          </select>
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn btn-emerald" onclick="AppController.runV1AccessCheck()">Check Access</button>
+          </div>
+
+          <label>Access Verification Result</label>
+          <div id="v1-access-output" class="console-box" style="padding:1rem;min-height:75px;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- 2. ACCESS MATRIX -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">2. Formal Access Matrix</span>
+            <span class="card-tag">Binary Relation R &sube; U &times; A</span>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem;">
+            Matrix representation \(M_R\). The active rule selected in the Access Check is dynamically highlighted below:
+          </p>
+          <div class="table-wrap">
+            <table id="v1-matrix-table">
+              <thead>
+                <tr>
+                  <th>User Type</th>
+                  <th>Library</th>
+                  <th>Laboratory</th>
+                  <th>Office</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="matrix-row-Student">
+                  <td><strong>Student</strong></td>
+                  <td id="cell-Student-Library"><span class="badge badge-emerald">Yes</span></td>
+                  <td id="cell-Student-Laboratory"><span class="badge badge-emerald">Yes</span></td>
+                  <td id="cell-Student-Office"><span class="badge badge-rose">No</span></td>
+                </tr>
+                <tr id="matrix-row-Teacher">
+                  <td><strong>Teacher</strong></td>
+                  <td id="cell-Teacher-Library"><span class="badge badge-emerald">Yes</span></td>
+                  <td id="cell-Teacher-Laboratory"><span class="badge badge-emerald">Yes</span></td>
+                  <td id="cell-Teacher-Office"><span class="badge badge-emerald">Yes</span></td>
+                </tr>
+                <tr id="matrix-row-Visitor">
+                  <td><strong>Visitor</strong></td>
+                  <td id="cell-Visitor-Library"><span class="badge badge-amber">Yes*</span></td>
+                  <td id="cell-Visitor-Laboratory"><span class="badge badge-rose">No</span></td>
+                  <td id="cell-Visitor-Office"><span class="badge badge-rose">No</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.6rem;">
+            *<em>Visitor has limited access (reading room privileges only).</em>
+          </p>
+        </div>
+      </div>
+
+      <!-- 3. NUMBER THEORY CHECK -->
+      <div class="card" style="margin-top:1.25rem;">
+        <div class="card-header">
+          <span class="card-title">3. Elementary Number Theory Check</span>
+          <span class="card-tag">Modular Arithmetic & Euclidean Algorithm</span>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">
+          Analyzes user identification numbers through parity, divisibility, and formal Euclidean division \(\gcd(a, b)\).
+        </p>
+
+        <div class="grid-2" style="align-items:start;">
+          <div>
+            <label>ID Number (a)</label>
+            <input id="v1-num1" type="number" value="1042" placeholder="Enter ID number" oninput="AppController.runV1NumberTheory()" />
+
+            <label>Second Number for GCD (b)</label>
+            <input id="v1-num2" type="number" value="2026" placeholder="Enter second number" oninput="AppController.runV1NumberTheory()" />
+
+            <div class="btn-group" style="margin-bottom:1rem;">
+              <button class="btn btn-cyan" onclick="AppController.runV1NumberTheory()">Compute Number Theory Analysis</button>
+            </div>
+
+            <label>Arithmetic Evaluation Summary</label>
+            <div id="v1-number-summary" class="console-box" style="padding:1rem;">
+              <!-- Summary populated by JS -->
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.5rem;color:var(--text-main);">
+              Euclidean Algorithm Step-by-Step Division Tableau
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Dividend (a)</th>
+                    <th>Divisor (b)</th>
+                    <th>Quotient (q)</th>
+                    <th>Remainder (r)</th>
+                    <th>Division Equation (a = b&middot;q + r)</th>
+                  </tr>
+                </thead>
+                <tbody id="v1-euclidean-steps-body">
+                  <!-- Steps populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. SYSTEM EVOLUTION & UPGRADE MATRIX -->
+      <div class="card" style="margin-top:1.25rem;">
+        <div class="card-header">
+          <span class="card-title">Architectural Evolution: Prototype (v1) &rarr; Smart Campus (v2)</span>
+          <span class="card-tag">Discrete Mathematics Upgrade Mapping</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>V1 Foundational Component (Honielyn)</th>
+                <th>Limitation in Prototype</th>
+                <th>V2 Upgraded Discrete Structure (Current System)</th>
+                <th>Mathematical / Algorithmic Rigor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>User Access Check</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Conditional <code>if/else</code> checks</span></td>
+                <td>Stateless, no session history, bypassable</td>
+                <td><strong>Module 1: Finite State Machine (FSM)</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">7 States, 21 Transition Function (&delta;)</span></td>
+                <td>Guarded state machine: \(M = (Q, \Sigma, \delta, q_0, F)\). Only defined events allow state transitions.</td>
+              </tr>
+              <tr>
+                <td><strong>Access Authentication</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Plaintext role selection</span></td>
+                <td>Vulnerable to spoofing, zero encryption</td>
+                <td><strong>Module 2: Cryptography & Auth Gate</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Vigen&egrave;re, Caesar, XOR & SHA-256</span></td>
+                <td>Salted credential hash digests + modular shift ciphers \(C_i = (P_i + K_i) \bmod 26\) gate the FSM login.</td>
+              </tr>
+              <tr>
+                <td><strong>Area Access Management</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">3 static rooms (Library/Lab/Office)</span></td>
+                <td>No pathfinding, disconnected spaces</td>
+                <td><strong>Module 3: Graph Campus Navigation</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Weighted Campus Graph + Dijkstra</span></td>
+                <td>Shortest-path routing \(O((V + E) \log V)\) and recursive DFS route discovery between campus facilities.</td>
+              </tr>
+              <tr>
+                <td><strong>Campus Structure</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Flat list of 3 rooms</span></td>
+                <td>No departmental hierarchy or capacity</td>
+                <td><strong>Module 4: Campus Tree Directory</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Hierarchical Tree + Traversals</span></td>
+                <td>Recursive Pre-Order, Post-Order, and recursive subtree capacity aggregation across university departments.</td>
+              </tr>
+              <tr>
+                <td><strong>User Identification</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Single integer ID check</span></td>
+                <td>No student database search or sorting</td>
+                <td><strong>Module 5: Searching & Sorting</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Recursive Merge/Quick Sort + Binary Search</span></td>
+                <td>Sorts campus records in \(O(n \log n)\) and executes \(O(\log n)\) divide-and-conquer binary search.</td>
+              </tr>
+              <tr>
+                <td><strong>Number Theory Checks</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Parity, Modulo-5, and Euclidean GCD</span></td>
+                <td>Basic terminal print loop</td>
+                <td><strong>Module 6: Probability & Random Variables</strong><br><span style="font-size:0.75rem;color:var(--text-muted);">Permutations, Combinations, PMF, \(E[X]\), \(\text{Var}(X)\)</span></td>
+                <td>Extends discrete mathematics into combinatorial security schedules and probability distributions for occupancy.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- TAB 1: FINITE STATE MACHINE -->
-    <section id="tab-fsm" class="tab-panel active">
+    <section id="tab-fsm" class="tab-panel">
       <div class="grid-sidebar">
         <div class="card">
           <div class="card-header">
@@ -370,6 +579,7 @@
   </main>
 
   <!-- Modular JavaScript Engines -->
+  <script src="js/v1-foundation.js"></script>
   <script src="js/fsm-engine.js"></script>
   <script src="js/crypto-security.js"></script>
   <script src="js/campus-graph.js"></script>

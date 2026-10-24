@@ -1,29 +1,39 @@
 # BISU Clarin — Secure Smart Campus Navigation and Monitoring System
-**Final Project Technical Documentation**
+**Final Project Technical Documentation & Evolution Analysis**
 
-## 1. Project Overview
-The **Secure Smart Campus Navigation and Monitoring System** is an integrated web application designed for **Bohol Island State University (BISU) — Clarin Campus (College of Science and Management)**. It extends a campus monitoring prototype by integrating discrete structures and algorithmic foundations:
-1. **Cryptography** (`js/crypto-security.js`)
-2. **Searching & Sorting Algorithms** (`js/search-sort.js`)
-3. **Recursion** (`js/campus-graph.js`, `js/campus-tree.js`, `js/search-sort.js`)
-4. **Counting Methods & Discrete Probability** (`js/probability-rv.js`)
-5. **Random Variables & Expectation Analysis** (`js/probability-rv.js`)
-6. **Graph-Based Campus Navigation** (`js/campus-graph.js`)
-7. **Tree-Based Organizational Hierarchy** (`js/campus-tree.js`)
-8. **Finite State Machine (FSM) System Core** (`js/fsm-engine.js`)
+## 1. Project Overview & System Lineage
+The **Secure Smart Campus Navigation and Monitoring System** is an integrated system designed for **Bohol Island State University (BISU) — Clarin Campus (College of Science and Management)**. 
+
+### Academic Lineage (V1 Prototype &rarr; V2 Discrete Mathematics Upgrade)
+The project evolved directly from an initial foundation prototype:
+- **Version 1 (Prototype)**: *Student Access Management System* (Authored by **Honielyn**), which established the core requirements of:
+  1. User Access Verification (Conditional role and area checks)
+  2. Access Control Matrix (Tabular binary relation between roles and campus zones)
+  3. Elementary Number Theory (Parity check, divisibility by 5, and Euclidean Algorithm GCD)
+- **Version 2 (Current Upgrade)**: Expands these foundational concepts into 6 mathematically formalized discrete structures:
+  1. **Finite State Machine Core (FSM)** (`js/fsm-engine.js`)
+  2. **Cryptography & Auth Gate** (`js/crypto-security.js`)
+  3. **Graph-Based Campus Navigation** (`js/campus-graph.js`)
+  4. **Tree-Based Organizational Hierarchy** (`js/campus-tree.js`)
+  5. **Searching & Sorting Algorithms** (`js/search-sort.js`)
+  6. **Counting Methods & Discrete Probability** (`js/probability-rv.js`)
+
+Both the standalone terminal prototype (`v1_prototype.py`) and the interactive web implementation (`js/v1-foundation.js`) are integrated and runnable.
 
 ---
 
 ## 2. Folder Structure
 ```text
 bisu-smart-campus/
-├── index.html                        # Main Modern Dashboard UI
-├── README.md                         # Quick Start Instructions
+├── index.html                        # Main Modern Dashboard UI (Includes V1 + V2 Modules)
+├── v1_prototype.py                   # Standalone Python CLI Prototype (Honielyn)
+├── README.md                         # Quick Start & Dual-Run Instructions
 ├── css/
 │   └── modern-ui.css                 # Glassmorphic Dark Theme Stylesheet
 ├── js/
+│   ├── v1-foundation.js              # V1 Engine: Binary Relation Matrix & Euclidean Algorithm
 │   ├── fsm-engine.js                 # 7-State Finite State Machine Engine
-│   ├── crypto-security.js            # Vigenere, Caesar, XOR & Salted Hash
+│   ├── crypto-security.js            # Vigenère, Caesar, XOR & Salted Hash
 │   ├── campus-graph.js               # Weighted Graph, Dijkstra & Recursive DFS
 │   ├── campus-tree.js                # Campus Tree Hierarchy & Recursive Traversals
 │   ├── search-sort.js                # Merge/Quick/Insertion Sort & Binary/Linear Search
@@ -43,6 +53,22 @@ bisu-smart-campus/
 ---
 
 ## 3. Mathematical & Algorithmic Explanations
+
+### 3.0 Foundational Prototype: Binary Relations & Number Theory (V1)
+- **Binary Relation & Access Matrix ($M_R$)**:
+  Let $U = \{\text{Student}, \text{Teacher}, \text{Visitor}\}$ be the universe of campus users, and $A = \{\text{Library}, \text{Laboratory}, \text{Office}\}$ be the set of campus zones.
+  The authorization policy is formalized as a binary relation $R \subseteq U \times A$, represented by the Boolean matrix $M_R \in \{0, 1\}^{3 \times 3}$:
+  $$M_R = \begin{pmatrix} 1 & 1 & 0 \\ 1 & 1 & 1 \\ 1^* & 0 & 0 \end{pmatrix}$$
+  where $1$ denotes granted access, $0$ denotes denied access, and $1^*$ denotes limited/conditional guest clearance.
+- **Parity & Modulo Arithmetic**:
+  Every student ID $n \in \mathbb{Z}$ is partitioned into congruence classes modulo 2 and modulo 5:
+  $$n \equiv r_2 \pmod 2, \quad r_2 \in \{0, 1\} \implies \text{Parity Partition}$$
+  $$n \equiv r_5 \pmod 5, \quad r_5 = 0 \iff 5 \mid n$$
+- **Euclidean Algorithm for Greatest Common Divisor ($\gcd(a, b)$)**:
+  By the Division Theorem, for integers $a, b$ with $b > 0$, there exist unique integers $q, r$ such that:
+  $$a = b \cdot q + r, \quad 0 \le r < b$$
+  The Euclidean Algorithm states that $\gcd(a, b) = \gcd(b, r)$. Iterating until $r_k = 0$ yields the greatest common divisor as the last non-zero remainder $r_{k-1}$.
+  In the system, this is computed with a complete quotient-remainder tableau.
 
 ### 3.1 Finite State Machine (FSM)
 Defined formally as a 5-tuple $M = (Q, \Sigma, \delta, q_0, F)$:
