@@ -6,8 +6,8 @@
 
 const CampusRecords = {
   data: [
-    { id: 1042, name: 'Cañastra, John Lord', role: 'Student', room: 'COMLAB-1',clearance: 3, time: '08:15' },
-    { id: 1018, name: 'Managaytay, Maryjoy', role: 'Student', room: 'COMLAB-2', clearance: 3, time: '08:05' },
+    { id: 1042, name: 'Dela Cruz, Juan', role: 'Student', room: 'COMLAB-1',clearance: 3, time: '08:15' },
+    { id: 1018, name: 'Santos, Maria', role: 'Student', room: 'COMLAB-2', clearance: 3, time: '08:05' },
     { id: 1089, name: 'Reyes, Christian',    role: 'Faculty', room: 'CSM-FAC',  clearance: 5, time: '07:50' },
     { id: 1005, name: 'Bautista, Angela',    role: 'Student', room: 'MAIN-LIB', clearance: 2, time: '09:10' },
     { id: 1064, name: 'Degamo, Kenneth',     role: 'Staff',   room: 'REG-HUB',  clearance: 4, time: '08:30' },
