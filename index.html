@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BISU Clarin — Secure Smart Campus Navigation & Monitoring System</title>
+  <link rel="stylesheet" href="css/modern-ui.css" />
+</head>
+<body>
+
+  <!-- Top Header with Live FSM Bar -->
+  <header class="top-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-logo">BISU</div>
+        <div>
+          <div class="brand-title">Secure Smart Campus Navigation & Monitoring System</div>
+          <div class="brand-subtitle">Bohol Island State University — Clarin Campus • College of Science & Management</div>
+        </div>
+      </div>
+
+      <div class="fsm-status-bar">
+        <span>FSM State:</span>
+        <span id="header-fsm-badge" class="fsm-badge">IDLE</span>
+        <span id="header-fsm-desc" style="color:var(--text-muted)">Waiting for user interaction</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-container">
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="AppController.switchTab('tab-fsm', this)">1. Finite State Machine (FSM)</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-crypto', this)">2. Cryptography & Auth Gate</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-nav', this)">3. Graph Navigation & Recursion</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-tree', this)">4. Campus Tree & Recursion</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-search', this)">5. Searching & Sorting</button>
+      <button class="tab-btn" onclick="AppController.switchTab('tab-prob', this)">6. Probability & Random Variables</button>
+    </div>
+  </div>
+
+  <!-- Main Content Panels -->
+  <main class="main-container">
+
+    <!-- TAB 1: FINITE STATE MACHINE -->
+    <section id="tab-fsm" class="tab-panel active">
+      <div class="grid-sidebar">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">FSM Event Controller</span>
+            <span class="card-tag">M = (Q, Σ, δ, q0, F)</span>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">
+            Trigger formal input symbols (σ ∈ Σ), or click any state node to fire the transition that reaches it.
+            Moves with no entry in δ are rejected and logged — NAVIGATING and MONITORING cannot be reached without AUTH_OK.
+          </p>
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn" onclick="CampusFSM.dispatch('START_AUTH')">START_AUTH → Login</button>
+            <button class="btn btn-emerald" onclick="CampusFSM.dispatch('AUTH_OK')">AUTH_OK → Granted</button>
+            <button class="btn btn-rose" onclick="CampusFSM.dispatch('AUTH_FAIL')">AUTH_FAIL → Denied</button>
+            <button class="btn btn-amber" onclick="CampusFSM.dispatch('RETRY')">RETRY → Login</button>
+            <button class="btn btn-cyan" onclick="CampusFSM.dispatch('OPEN_NAV')">OPEN_NAV → Navigating</button>
+            <button class="btn" onclick="CampusFSM.dispatch('OPEN_MON')">OPEN_MON → Monitoring</button>
+            <button class="btn btn-outline" onclick="CampusFSM.dispatch('LOGOUT')">LOGOUT → Idle</button>
+            <button class="btn btn-rose" onclick="CampusFSM.dispatch('SHUTDOWN')">SHUTDOWN → Exit</button>
+            <button class="btn btn-outline" onclick="CampusFSM.dispatch('REBOOT')">REBOOT → Idle</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Interactive State Transition Diagram</span>
+            <span class="card-tag">7 States • 21 Transitions</span>
+          </div>
+          <svg id="fsm-svg" class="svg-canvas" viewBox="0 0 920 420"></svg>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.25rem;">
+        <div class="card-header">
+          <span class="card-title">Live State Transition History Log</span>
+          <span class="card-tag">δ(q, σ) Trace</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Previous State (q)</th>
+                <th>Event Symbol (σ)</th>
+                <th>Next State δ(q,σ)</th>
+                <th>Transition Description</th>
+              </tr>
+            </thead>
+            <tbody id="fsm-log-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CRYPTOGRAPHY & SECURITY -->
+    <section id="tab-crypto" class="tab-panel">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Cipher Encryption & Decryption Engine</span>
+            <span class="card-tag">Security Feature</span>
+          </div>
+          <label>Select Cryptographic Algorithm</label>
+          <select id="crypto-algo" onchange="AppController.runCrypto(false)">
+            <option value="vigenere">Vigenère Polyalphabetic Cipher: C_i = (P_i + K_i) mod 26</option>
+            <option value="caesar">Caesar Shift Cipher: C_i = (P_i + s) mod 26</option>
+            <option value="xor">XOR Stream Cipher (Hex Output): C_i = P_i ⊕ K_i</option>
+          </select>
+
+          <label>Plaintext / Message / Access Token</label>
+          <input id="crypto-input" type="text" value="BISU-CLARIN-CSM-ROOM-204" />
+
+          <label>Secret Key / Shift Value</label>
+          <input id="crypto-key" type="text" value="CLARIN" />
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn" onclick="AppController.runCrypto(false)">Encrypt Message</button>
+            <button class="btn btn-cyan" onclick="AppController.runCrypto(true)">Decrypt Message</button>
+          </div>
+
+          <div id="crypto-note" style="font-size:0.78rem;margin-bottom:0.85rem;"></div>
+
+          <label>Resulting Output</label>
+          <input id="crypto-output" type="text" readonly class="mono" />
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">FSM-Linked Security Gate Login</span>
+            <span class="card-tag">Salted Credential Hash</span>
+          </div>
+          <label>Campus User ID</label>
+          <input id="auth-user" type="text" value="2026-CSM-1042" />
+
+          <label>Access PIN (Use 2026 for Valid Auth, any other for Denied)</label>
+          <input id="auth-pin" type="password" value="2026" />
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn btn-emerald" onclick="AppController.authenticateGate()">Verify & Transition FSM</button>
+          </div>
+
+          <div id="auth-hash-out" class="console-box">Salted Hash: Ready</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.25rem;">
+        <div class="card-header">
+          <span class="card-title">Character-by-Character Mathematical Transformation Breakdown</span>
+          <span class="card-tag">Modular Arithmetic</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Input Char (P)</th>
+                <th>Key Char (K)</th>
+                <th>Mathematical Formula</th>
+                <th>Output (C)</th>
+              </tr>
+            </thead>
+            <tbody id="crypto-steps-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: GRAPH NAVIGATION & RECURSION -->
+    <section id="tab-nav" class="tab-panel">
+      <div class="grid-sidebar">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Route Planner & Recursive DFS</span>
+            <span class="card-tag">G = (V, E, w)</span>
+          </div>
+          <label>Origin Building (Start Node)</label>
+          <select id="nav-start">
+            <option value="GATE">Main Gate (GATE)</option>
+            <option value="GUARD">Security Office (GUARD)</option>
+            <option value="ADMIN">Admin Building (ADMIN)</option>
+            <option value="REGISTRAR">Registrar (REGISTRAR)</option>
+            <option value="LIBRARY">Campus Library (LIBRARY)</option>
+            <option value="CSM">CSM Building (CSM)</option>
+            <option value="COMLAB1">ComLab 1 (COMLAB1)</option>
+            <option value="COMLAB2">ComLab 2 (COMLAB2)</option>
+            <option value="CAFETERIA">Cafeteria (CAFETERIA)</option>
+            <option value="GYM">Gymnasium (GYM)</option>
+          </select>
+
+          <label>Destination Building (Target Node)</label>
+          <select id="nav-end">
+            <option value="COMLAB1" selected>ComLab 1 (COMLAB1)</option>
+            <option value="COMLAB2">ComLab 2 (COMLAB2)</option>
+            <option value="GYM">Gymnasium (GYM)</option>
+            <option value="CAFETERIA">Cafeteria (CAFETERIA)</option>
+            <option value="LIBRARY">Campus Library (LIBRARY)</option>
+          </select>
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn btn-cyan" onclick="AppController.runDijkstra()">Dijkstra Shortest Path</button>
+            <button class="btn" onclick="AppController.runRecursiveDFS()">Recursive All-Paths DFS</button>
+          </div>
+
+          <div id="nav-console" class="console-box"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">BISU Clarin Campus Weighted Graph Map</span>
+            <span class="card-tag">10 Nodes • 15 Edges</span>
+          </div>
+          <svg id="campus-graph-svg" class="svg-canvas" viewBox="0 0 750 390"></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: HIERARCHICAL TREE & RECURSION -->
+    <section id="tab-tree" class="tab-panel">
+      <div class="grid-sidebar">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Recursive Tree Traversals</span>
+            <span class="card-tag">N-Ary Hierarchy</span>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">
+            Explore the BISU Clarin organizational hierarchy using recursive tree traversal algorithms and recursive subtree capacity summation.
+          </p>
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn" onclick="AppController.runTreeTraversal('preorder')">Recursive Pre-Order</button>
+            <button class="btn btn-cyan" onclick="AppController.runTreeTraversal('postorder')">Recursive Post-Order</button>
+            <button class="btn btn-emerald" onclick="AppController.runTreeTraversal('levelorder')">Level-Order (BFS)</button>
+          </div>
+          <div id="tree-console" class="console-box"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Campus Department & Room Hierarchy Tree</span>
+            <span class="card-tag">Numbered Visit Order</span>
+          </div>
+          <svg id="campus-tree-svg" class="svg-canvas" viewBox="0 0 770 370"></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SEARCHING & SORTING -->
+    <section id="tab-search" class="tab-panel">
+      <div class="grid-sidebar">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Search & Sort Controls</span>
+            <span class="card-tag">Algorithmic Analysis</span>
+          </div>
+          <label>Sort Key Attribute</label>
+          <select id="sort-key">
+            <option value="id">User ID (Numeric)</option>
+            <option value="name">Full Name (Alphabetical)</option>
+            <option value="room">Assigned Room</option>
+            <option value="clearance">Clearance Level</option>
+          </select>
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn" onclick="AppController.runSort('merge')">Merge Sort (Recursive)</button>
+            <button class="btn btn-cyan" onclick="AppController.runSort('quick')">Quick Sort (Recursive)</button>
+            <button class="btn btn-outline" onclick="AppController.runSort('insertion')">Insertion Sort</button>
+          </div>
+
+          <label>Search Query (ID for Binary Search, or Name/Room for Linear)</label>
+          <input id="search-query" type="text" value="1042" />
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn btn-emerald" onclick="AppController.runSearch('binary')">Binary Search O(log n)</button>
+            <button class="btn btn-amber" onclick="AppController.runSearch('linear')">Linear Search O(n)</button>
+          </div>
+
+          <div id="search-sort-log" class="console-box"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Campus Access & Room Records</span>
+            <span class="card-tag">Live Dataset</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Full Name</th>
+                  <th>Role</th>
+                  <th>Room</th>
+                  <th>Clearance</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="records-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: PROBABILITY & RANDOM VARIABLES -->
+    <section id="tab-prob" class="tab-panel">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Counting Methods & Discrete Probability</span>
+            <span class="card-tag">P(n,r) & C(n,r)</span>
+          </div>
+          <label>Total Available Rooms / Patrol Checkpoints (n)</label>
+          <input id="prob-n" type="number" value="10" min="1" max="15" onchange="AppController.runCombinatorics()" />
+
+          <label>Selected Rooms / Assigned Checkpoints (r)</label>
+          <input id="prob-r" type="number" value="3" min="1" max="10" onchange="AppController.runCombinatorics()" />
+
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-label">Permutations P(n,r)</div>
+              <div id="stat-perm" class="stat-value">720</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Combinations C(n,r)</div>
+              <div id="stat-comb" class="stat-value">120</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Room Availability P(A)</div>
+              <div id="stat-prob" class="stat-value">70.0%</div>
+            </div>
+          </div>
+
+          <button class="btn" onclick="AppController.runCombinatorics()">Recompute Combinatorics</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Random Variable X (Concurrent Lab Users)</span>
+            <span class="card-tag">E[X], Var(X), σ</span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-label">Expected Value E[X]</div>
+              <div id="stat-ex" class="stat-value">29.00</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Variance Var(X)</div>
+              <div id="stat-var" class="stat-value">106.50</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Std Deviation (σ)</div>
+              <div id="stat-sd" class="stat-value">10.32</div>
+            </div>
+          </div>
+
+          <div class="btn-group" style="margin-bottom:1rem;">
+            <button class="btn btn-cyan" onclick="AppController.runMonteCarlo()">Run 500-Trial Monte Carlo Simulation</button>
+          </div>
+
+          <div id="prob-console" class="console-box"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modular JavaScript Engines -->
+  <script src="js/fsm-engine.js"></script>
+  <script src="js/crypto-security.js"></script>
+  <script src="js/campus-graph.js"></script>
+  <script src="js/campus-tree.js"></script>
+  <script src="js/search-sort.js"></script>
+  <script src="js/probability-rv.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
