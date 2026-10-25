@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * Module 0: V1 Foundation - Student Access & Number Theory (js/v1-foundation.js)
- * Original Concept & Implementation: Honielyn
+ * Original Concept & Implementation: Honielyn A. Torres and Jheanne Mae M. Cabudlan
  * Upgraded & Formalized for BISU Clarin Secure Smart Campus System
  * =============================================================================
  * Implements:
@@ -164,3 +164,4 @@ const V1Foundation = {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = V1Foundation;
 }
+

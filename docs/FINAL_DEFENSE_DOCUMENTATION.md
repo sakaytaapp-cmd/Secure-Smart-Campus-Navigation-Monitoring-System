@@ -6,7 +6,7 @@ The **Secure Smart Campus Navigation and Monitoring System** is an integrated sy
 
 ### Academic Lineage (V1 Prototype &rarr; V2 Discrete Mathematics Upgrade)
 The project evolved directly from an initial foundation prototype:
-- **Version 1 (Prototype)**: *Student Access Management System* (Authored by **Honielyn**), which established the core requirements of:
+- **Version 1 (Prototype)**: *Student Access Management System* (Authored by **Honielyn A. Torres** and **Jheanne Mae M. Cabudlan**), which established the core requirements of:
   1. User Access Verification (Conditional role and area checks)
   2. Access Control Matrix (Tabular binary relation between roles and campus zones)
   3. Elementary Number Theory (Parity check, divisibility by 5, and Euclidean Algorithm GCD)
@@ -26,7 +26,7 @@ Both the standalone terminal prototype (`v1_prototype.py`) and the interactive w
 ```text
 bisu-smart-campus/
 ├── index.html                        # Main Modern Dashboard UI (Includes V1 + V2 Modules)
-├── v1_prototype.py                   # Standalone Python CLI Prototype (Honielyn)
+├── v1_prototype.py                   # Standalone Python CLI Prototype (Honielyn A. Torres & Jheanne Mae M. Cabudlan)
 ├── README.md                         # Quick Start & Dual-Run Instructions
 ├── css/
 │   └── modern-ui.css                 # Glassmorphic Dark Theme Stylesheet

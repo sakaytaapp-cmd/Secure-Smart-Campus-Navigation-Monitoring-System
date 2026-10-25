@@ -1,7 +1,7 @@
 """
 =============================================================================
 STUDENT ACCESS MANAGEMENT SYSTEM (Original Foundation Prototype v1)
-Authored by: Honielyn
+Authored by: Honielyn A. Torres and Jheanne Mae M. Cabudlan
 Project Lineage: Precursor to BISU Clarin Secure Smart Campus System (v2)
 =============================================================================
 This program serves as the initial foundation prototype for the campus system.
@@ -113,3 +113,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
