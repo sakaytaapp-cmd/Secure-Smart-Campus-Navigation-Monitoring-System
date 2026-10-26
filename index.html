@@ -65,18 +65,18 @@
             <span class="card-tag">Rule-Based Authorization</span>
           </div>
           <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;">
-            Select a User Type and Area to verify access permissions according to the original campus access rules.
+            Select a User Type and Area, then click <strong>Check Access</strong> to verify permissions according to the original campus access rules.
           </p>
 
           <label>User Type</label>
-          <select id="v1-user-type" onchange="AppController.runV1AccessCheck()">
+          <select id="v1-user-type" onchange="AppController.resetV1AccessCheck()">
             <option value="Student" selected>Student</option>
             <option value="Teacher">Teacher</option>
             <option value="Visitor">Visitor</option>
           </select>
 
           <label>Campus Area</label>
-          <select id="v1-area" onchange="AppController.runV1AccessCheck()">
+          <select id="v1-area" onchange="AppController.resetV1AccessCheck()">
             <option value="Library" selected>Library</option>
             <option value="Laboratory">Laboratory</option>
             <option value="Office">Office</option>

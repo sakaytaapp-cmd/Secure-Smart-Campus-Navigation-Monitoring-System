@@ -242,6 +242,20 @@ const AppController = {
     document.getElementById('stat-prob').textContent = prob.toFixed(1) + '%';
   },
 
+  resetV1AccessCheck() {
+    const outEl = document.getElementById('v1-access-output');
+    if (outEl) {
+      outEl.innerHTML = `
+        <div style="color:var(--text-muted);font-size:0.82rem;">
+          Select a user type and campus area, then click <strong style="color:#fff;">Check Access</strong> to verify permissions.
+        </div>
+      `;
+    }
+
+    document.querySelectorAll('#v1-matrix-table tr').forEach(r => r.classList.remove('matrix-active-row'));
+    document.querySelectorAll('#v1-matrix-table td').forEach(c => c.classList.remove('matrix-active-cell'));
+  },
+
   runV1AccessCheck() {
     const roleEl = document.getElementById('v1-user-type');
     const areaEl = document.getElementById('v1-area');
@@ -359,7 +373,7 @@ const AppController = {
   },
 
   init() {
-    this.runV1AccessCheck();
+    this.resetV1AccessCheck();
     this.runV1NumberTheory();
     CampusFSM.render();
     this.runCrypto(false);
